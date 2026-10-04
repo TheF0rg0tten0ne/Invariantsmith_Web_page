@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InvariantSmith: a local, checked code-fixing assistant</title>
+  <meta name="description" content="InvariantSmith is a local AI-assisted code-fixing tool. A desktop editor talks to a small model on your own machine, and every fix is checked before you accept it.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="InvariantSmith">
+  <meta property="og:description" content="A local, offline-capable code-fixing assistant. Every fix is verified before you see it.">
+  <meta property="og:image" content="assets/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="InvariantSmith">
+  <meta name="twitter:description" content="A local, offline-capable code-fixing assistant. Every fix is verified before you see it.">
+  <meta name="twitter:image" content="assets/og-card.png">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <header class="site-header" id="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">InvariantSmith</a>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#what">What it does</a>
+        <a href="#how">How it works</a>
+        <a href="#model">Why a small model</a>
+        <a href="#start">Get started</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch theme (T)">
+        <span class="theme-icon" aria-hidden="true"></span>
+        <span class="theme-label">Theme</span>
+        <kbd>T</kbd>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="lamps" aria-hidden="true"><div class="lamp lamp--a"><svg viewBox="0 0 70 150" focusable="false"><defs><radialGradient id="bulbGlow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff6e0"/><stop offset="0.4" stop-color="#ffc56b"/><stop offset="1" stop-color="#c77a2a" stop-opacity="0"/></radialGradient></defs><line x1="35" y1="0" x2="35" y2="62" stroke="#8a7a5a" stroke-width="1.4"/><rect x="28" y="58" width="14" height="10" rx="2" fill="#3a2f3f"/><ellipse cx="35" cy="100" rx="22" ry="28" fill="url(#bulbGlow)" opacity="0.6"/><circle cx="35" cy="102" r="11" fill="#ffe2a3"/><path d="M31 104 Q35 94 35 110 Q35 94 39 104" fill="none" stroke="#fff7e6" stroke-width="1.2"/></svg></div><div class="lamp lamp--b"><svg viewBox="0 0 70 150" focusable="false"><line x1="35" y1="0" x2="35" y2="62" stroke="#8a7a5a" stroke-width="1.4"/><rect x="28" y="58" width="14" height="10" rx="2" fill="#3a2f3f"/><ellipse cx="35" cy="100" rx="22" ry="28" fill="url(#bulbGlow)" opacity="0.6"/><circle cx="35" cy="102" r="11" fill="#ffe2a3"/><path d="M31 104 Q35 94 35 110 Q35 94 39 104" fill="none" stroke="#fff7e6" stroke-width="1.2"/></svg></div><div class="lamp lamp--c"><svg viewBox="0 0 70 150" focusable="false"><line x1="35" y1="0" x2="35" y2="62" stroke="#8a7a5a" stroke-width="1.4"/><rect x="28" y="58" width="14" height="10" rx="2" fill="#3a2f3f"/><ellipse cx="35" cy="100" rx="22" ry="28" fill="url(#bulbGlow)" opacity="0.6"/><circle cx="35" cy="102" r="11" fill="#ffe2a3"/><path d="M31 104 Q35 94 35 110 Q35 94 39 104" fill="none" stroke="#fff7e6" stroke-width="1.2"/></svg></div></div>
+      <div class="wrap">
+        <p class="eyebrow reveal">A local code-fixing assistant</p>
+        <h1 class="hero-title">
+          <span class="stagger">Fixes you can check,</span>
+          <span class="stagger">on your own machine.</span>
+        </h1>
+        <p class="lede reveal">InvariantSmith runs a small fine-tuned model on your laptop and checks every fix before offering it. Your code never leaves the machine.</p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#start">Get started</a>
+          <a class="btn btn-secondary" href="#how">How it works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT IT DOES -->
+    <section class="section" id="what" data-nav-section>
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">What it does</p>
+          <h2>An editor, and a fix loop you can trust.</h2>
+          <p>Open a Python, C, or Java file. InvariantSmith reports the errors it finds and proposes a fix as a unified diff. You accept, reject, or ask for another attempt.</p>
+        </header>
+
+        <div class="feature-grid">
+          <article class="card reveal">
+            <h3>Analyse</h3>
+            <p>Finds errors in Python, C, and Java files and lists them in the editor.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Propose</h3>
+            <p>Suggests a fix as a diff. Some common errors are repaired by fixed rules, with no model involved, so those are fast and predictable.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Verify</h3>
+            <p>Checks the fix before offering it. See <a href="#verified">what verification checks</a>.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Decide and remember</h3>
+            <p>Accept, reject, or regenerate. Every suggestion and its outcome is kept in a local SQLite history.</p>
+          </article>
+        </div>
+
+        <div class="diff-demo reveal" id="diff-demo">
+          <div class="diff-head">
+            <span class="diff-title">Missing address-of in <code>scanf</code></span>
+            <button class="btn btn-small" id="diff-play" type="button" aria-pressed="false">Play</button>
+          </div>
+          <pre class="diff-code" aria-label="Before and after diff for a scanf call"><code><span class="line" data-state="both">int n;</span><span class="line" data-state="both">printf("Enter a number: ");</span><span class="line line-del" data-state="before">scanf("%d", n);</span><span class="line line-add" data-state="after">scanf("%d", &amp;n);</span><span class="line" data-state="both">printf("You entered %d\n", n);</span></code></pre>
+          <p class="diff-caption" id="diff-caption">Before: the second argument to <code>scanf</code> is missing <code>&amp;</code>. Press Play to see the fix applied.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section section-alt" id="how" data-nav-section>
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2>Five stages, and nothing is applied without a check.</h2>
+        </header>
+
+        <ol class="pipeline" id="pipeline">
+          <li class="stage reveal-stage"><span class="stage-num">01</span><h3>Analyse</h3><p>Scan the file and list the errors.</p></li>
+          <li class="stage reveal-stage"><span class="stage-num">02</span><h3>Propose</h3><p>Produce a diff from a fixed rule or the local model.</p></li>
+          <li class="stage reveal-stage"><span class="stage-num">03</span><h3>Verify</h3><p>Confirm the fix resolves the reported error and adds no new ones.</p></li>
+          <li class="stage reveal-stage"><span class="stage-num">04</span><h3>Apply or reject</h3><p>You decide. Nothing changes until you accept.</p></li>
+          <li class="stage reveal-stage"><span class="stage-num">05</span><h3>History</h3><p>The suggestion and its outcome are saved in SQLite.</p></li>
+        </ol>
+
+        <div class="verified-box reveal" id="verified">
+          <h3>What a "Verified fix" badge means</h3>
+          <ul class="check-list">
+            <li>The reported error is no longer produced after the fix.</li>
+            <li>The fixed file does not produce new errors that the original did not have.</li>
+          </ul>
+          <p class="note">Verification confirms these two checks. It does not confirm that the fix matches your intent. It does not confirm that the fix matches your intent, so read the diff before you accept it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY A SMALL MODEL -->
+    <section class="section" id="model" data-nav-section>
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Why a small local model</p>
+          <h2>A trade-off, not a shortcut.</h2>
+          <p>The model is a 1.5-billion-parameter Qwen2.5-Coder, fine-tuned with LoRA on 291 curated fix pairs. It is less capable than large cloud models. InvariantSmith makes up for that by checking its work instead of trusting it.</p>
+        </header>
+
+        <div class="table-wrap reveal">
+          <table class="compare">
+            <caption class="sr-only">Local 1.5B model compared with a large cloud model</caption>
+            <thead>
+              <tr><th scope="col"></th><th scope="col">Local 1.5B (InvariantSmith)</th><th scope="col">Large cloud model</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Where it runs</th><td>Your machine, no GPU needed</td><td>Remote servers</td></tr>
+              <tr><th scope="row">Code leaves the machine</th><td>No</td><td>Yes</td></tr>
+              <tr><th scope="row">Works offline</th><td>Yes, once the model is downloaded</td><td>No</td></tr>
+              <tr><th scope="row">Raw capability on open-ended problems</th><td>Lower</td><td>Higher</td></tr>
+              <tr><th scope="row">How fixes are kept honest</th><td>Verification, scoped chunking for long files, fixed rules, LoRA on curated pairs</td><td>Model quality and its own safeguards</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="stats reveal">
+          <div class="stat"><span class="stat-num" data-count="291">291</span><span class="stat-label">curated fix pairs used for training</span></div>
+          <div class="stat"><span class="stat-num">13/14</span><span class="stat-label">held-out cases verified (14 Python cases, eval_model.py)</span></div>
+          <div class="stat"><span class="stat-num">~3.3 GB</span><span class="stat-label">fine-tuned model files (two .gguf files)</span></div>
+        </div>
+        <p class="note reveal">The held-out set is small (14 cases, all Python), so 13 of 14 is a signal, not a benchmark. The 274 of 291 result (94.2%) is on the training examples and measures how well the model memorized them, so it is not reported as accuracy.</p>
+      </div>
+    </section>
+
+    <!-- GOALS -->
+    <section class="section section-alt" id="goals">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Goals and aims</p>
+          <h2>Make a small local model reliable enough for beginners.</h2>
+          <p>The aim is a tool that students and beginners can run on ordinary hardware, and trust because it checks its own work.</p>
+        </header>
+      </div>
+    </section>
+
+    <!-- CAPABILITIES VS ROADMAP -->
+    <section class="section" id="capabilities">
+      <div class="wrap two-col">
+        <div class="reveal">
+          <p class="eyebrow">Current capabilities</p>
+          <ul class="check-list">
+            <li>Live analysis of Python, C, and Java as you type.</li>
+            <li>Fixes shown as a diff, with a confidence badge and a Checks and Verification list.</li>
+            <li>Deterministic repairs for common beginner errors, without the model.</li>
+            <li>Converts whole programs between Python, C, and Java, with a side-by-side preview.</li>
+            <li>Run inside the editor, with stdin input and an Output tab.</li>
+            <li>A local SQLite history of every AI action and its outcome.</li>
+          </ul>
+        </div>
+        <div class="reveal">
+          <p class="eyebrow">Roadmap (not current features)</p>
+          <ul class="check-list roadmap">
+            <li>Larger models on capable hardware.</li>
+            <li>More languages.</li>
+            <li>Wider deterministic repair coverage.</li>
+            <li>Better evaluation datasets.</li>
+            <li>Team and classroom features.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- GETTING STARTED -->
+    <section class="section section-alt" id="start" data-nav-section>
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Getting started</p>
+          <h2>From clone to your first verified fix.</h2>
+          <p>Choose your operating system to see the matching commands. Each command has a copy button.</p>
+        </header>
+
+        <div class="requirements reveal">
+          <h3>Requirements</h3>
+          <ul class="check-list">
+            <li>Python 3.11 or newer (3.12 tested).</li>
+            <li>8 GB RAM recommended. No GPU needed.</li>
+            <li>About 2 GB of free disk space for the stock model, or about 3.3 GB for the fine-tuned pair, plus the repository.</li>
+            <li>Optional: <code>gcc</code> and <code>javac</code> on your PATH for more accurate C and Java checks.</li>
+            <li>Git.</li>
+          </ul>
+        </div>
+
+        <div class="os-tabs reveal" data-tabs>
+          <div class="tab-list" role="tablist" aria-label="Operating system">
+            <button class="tab" role="tab" id="tab-win" aria-controls="panel-win" aria-selected="true" data-tab="win" type="button">Windows</button>
+            <button class="tab" role="tab" id="tab-mac" aria-controls="panel-mac" aria-selected="false" data-tab="mac" tabindex="-1" type="button">macOS</button>
+            <button class="tab" role="tab" id="tab-linux" aria-controls="panel-linux" aria-selected="false" data-tab="linux" tabindex="-1" type="button">Linux</button>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="panel-win" aria-labelledby="tab-win" data-panel="win">
+            <p class="os-note">Activate the virtual environment you created in step 1, then run the same server and editor commands.</p>
+            <div class="code-block">
+              <pre><code>.venv\Scripts\activate</code></pre>
+              <button class="copy-btn" type="button" data-copy=".venv\Scripts\activate">Copy</button>
+            </div>
+            <p class="note">Python 3.11 or newer.</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="panel-mac" aria-labelledby="tab-mac" data-panel="mac" hidden>
+            <p class="os-note">Activate the virtual environment you created in step 1, then run the same server and editor commands.</p>
+            <div class="code-block">
+              <pre><code>source .venv/bin/activate</code></pre>
+              <button class="copy-btn" type="button" data-copy="source .venv/bin/activate">Copy</button>
+            </div>
+            <p class="note">Python 3.11 or newer.</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="panel-linux" aria-labelledby="tab-linux" data-panel="linux" hidden>
+            <p class="os-note">Activate the virtual environment you created in step 1, then run the same server and editor commands.</p>
+            <div class="code-block">
+              <pre><code>source .venv/bin/activate</code></pre>
+              <button class="copy-btn" type="button" data-copy="source .venv/bin/activate">Copy</button>
+            </div>
+            <p class="note">Python 3.11 or newer.</p>
+          </div>
+        </div>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <h3>1. Clone the project and create a virtual environment</h3>
+            <div class="code-block">
+              <pre><code>git clone https://github.com/TheF0rg0tten0ne/Invariantsmith_seventh_sem_project.git
+cd Invariantsmith_seventh_sem_project
+python -m venv .venv</code></pre>
+              <button class="copy-btn" type="button" data-copy="git clone https://github.com/TheF0rg0tten0ne/Invariantsmith_seventh_sem_project.git&#10;cd Invariantsmith_seventh_sem_project&#10;python -m venv .venv">Copy</button>
+            </div>
+            <p class="note">Then activate it with the command for your system in the tabs above.</p>
+          </li>
+
+          <li class="step reveal">
+            <h3>2. Get the model</h3>
+            <p>Place the model file in the <code>models/</code> folder of the cloned repo. Pick one option.</p>
+            <p><strong>Option A: stock base model (about 2 GB, downloaded by a script).</strong></p>
+            <div class="code-block">
+              <pre><code>bash scripts/download_model.sh</code></pre>
+              <button class="copy-btn" type="button" data-copy="bash scripts/download_model.sh">Copy</button>
+            </div>
+            <p><strong>Option B: fine-tuned files (from the <a href="https://drive.google.com/drive/folders/1q3km44Y8uxNlnX34n4BrtZXFsSiktCMW?usp=drive_link" rel="noopener">Google Drive folder</a>).</strong> The server finds these by filename, with no configuration:</p>
+            <ul class="check-list">
+              <li><code>qwen2.5-coder-1.5b-fix.Q8_0.gguf</code>, used for fixes and explanations.</li>
+              <li><code>qwen2.5-coder-1.5b-convert.Q8_0.gguf</code>, used for conversion. If absent, the fix model is used. Each file is about 1.65 GB.</li>
+            </ul>
+            <p class="note">If only the stock file is present, it is used for everything.</p>
+          </li>
+
+          <li class="step reveal">
+            <h3>3. Install dependencies</h3>
+            <p>Install the server packages, then the client packages.</p>
+            <div class="code-block">
+              <pre><code>pip install fastapi uvicorn pydantic pyflakes llama-cpp-python</code></pre>
+              <button class="copy-btn" type="button" data-copy="pip install fastapi uvicorn pydantic pyflakes llama-cpp-python">Copy</button>
+            </div>
+            <div class="code-block">
+              <pre><code>pip install -r client/requirements.txt</code></pre>
+              <button class="copy-btn" type="button" data-copy="pip install -r client/requirements.txt">Copy</button>
+            </div>
+            <p class="note">The repository has no root requirements file for the server yet, so the server packages are listed above.</p>
+          </li>
+
+          <li class="step reveal">
+            <h3>4. Start the server</h3>
+            <div class="code-block">
+              <pre><code>uvicorn server.main:app --host 127.0.0.1 --port 8731</code></pre>
+              <button class="copy-btn" type="button" data-copy="uvicorn server.main:app --host 127.0.0.1 --port 8731">Copy</button>
+            </div>
+            <p class="note">The model loads in the background. Check its state at <code>http://127.0.0.1:8731/model/status</code>.</p>
+          </li>
+
+          <li class="step reveal">
+            <h3>5. Start the editor</h3>
+            <div class="code-block">
+              <pre><code>python -m client.main</code></pre>
+              <button class="copy-btn" type="button" data-copy="python -m client.main">Copy</button>
+            </div>
+          </li>
+
+          <li class="step reveal">
+            <h3>6. Try it</h3>
+            <p>Open a <code>.py</code>, <code>.c</code>, or <code>.java</code> file with a known error. Click the underlined error or a row in the Problems panel, request a fix, and accept it if the diff looks right.</p>
+          </li>
+        </ol>
+
+        <div class="faq-inline reveal">
+          <p>If the editor reports that the model is not loaded, check that the <code>.gguf</code> file is in <code>models/</code> and restart the server. More answers are in the <a href="#faq">FAQ</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="section" id="architecture" data-nav-section>
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Architecture</p>
+          <h2>Three parts, talking over localhost.</h2>
+        </header>
+        <div class="arch reveal">
+          <div class="arch-node"><h3>Editor</h3><p>Desktop app (PySide6). Shows files, errors, and diffs.</p></div>
+          <div class="arch-link" aria-hidden="true">localhost:8731</div>
+          <div class="arch-node"><h3>Local server</h3><p>FastAPI. Runs analysis, verification, and history.</p></div>
+          <div class="arch-link" aria-hidden="true">llama-cpp-python</div>
+          <div class="arch-node"><h3>Model</h3><p>Small fine-tuned GGUF model, loaded from <code>models/</code>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section class="section section-alt" id="journey">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Development journey</p>
+          <h2>From idea to release.</h2>
+          <p class="note">Reconstructed from the team's recollection. No logs were kept.</p>
+        </header>
+        <ol class="timeline">
+          <li class="reveal"><span class="tl-ver">Ideation</span><p>The idea for a code-correction assistant came up.</p></li>
+          <li class="reveal"><span class="tl-ver">Design</span><p>First code-correction features, from v1 to v5.</p></li>
+          <li class="reveal"><span class="tl-ver">Development</span><p>Model trained on a GPU after getting Google Colab working. Added explanations of why and where code is fixed (v5 to v10), then C and Java support (v10 to v16).</p></li>
+          <li class="reveal"><span class="tl-ver">Prototyping</span><p>Code conversion between C, Python and Java, in every direction (v16 to v22).</p></li>
+          <li class="reveal"><span class="tl-ver">Debugging</span><p>Working through the Google Colab and training problems along the way.</p></li>
+          <li class="reveal"><span class="tl-ver">Testing</span><p>Pushed the tool to handle user code longer than 300 lines (v22 to v26).</p></li>
+          <li class="reveal"><span class="tl-ver">Cleanup</span><p>Tidying up the UI (v22 to v26), then a UI revamp and smoothing pass (v27 to v30).</p></li>
+          <li class="reveal"><span class="tl-ver">Publish</span><p>Feature classification and the final release (v27 to v30).</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq" data-nav-section>
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">FAQ and troubleshooting</p>
+          <h2>Common questions.</h2>
+        </header>
+        <div class="faq-list reveal">
+          <details>
+            <summary>Does my code leave my machine?</summary>
+            <p>No. The editor talks to a server bound to 127.0.0.1, and the model runs on your computer with no network access at inference time.</p>
+          </details>
+          <details>
+            <summary>Why does it say "Model not loaded" (503)?</summary>
+            <p>Check that a <code>.gguf</code> file with one of the expected names is in <code>models/</code>, then check <code>/model/status</code>. The first request also loads the model, which can take a while on CPU.</p>
+          </details>
+          <details>
+            <summary>Why does it say the fix "no longer matches the current code" (409)?</summary>
+            <p>The buffer changed after the fix was generated, so the fix was refused to protect your edits. Click Regenerate.</p>
+          </details>
+          <details>
+            <summary>Why isn't every fix marked verified?</summary>
+            <p>A fix is only marked verified if the reported error is gone and no new errors appear. Unverified fixes are still shown with their checks, so you can decide.</p>
+          </details>
+          <details>
+            <summary>Why a small model instead of a large one?</summary>
+            <p>It runs on ordinary laptops with no GPU and no cloud. See <a href="#model">the trade-offs</a>.</p>
+          </details>
+          <details>
+            <summary>Fixing a large file is slow. What can I do?</summary>
+            <p>Fix one error at a time. Long files are split into scoped chunks around the error, but a small model on CPU still takes time.</p>
+          </details>
+          <details>
+            <summary>C or Java errors look wrong.</summary>
+            <p>Install <code>gcc</code> and a JDK so the server uses the real compilers instead of its heuristic checker.</p>
+          </details>
+          <details>
+            <summary>What does the "Verified fix" badge mean?</summary>
+            <p>See <a href="#verified">what verification checks</a>.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREDITS -->
+    <section class="section section-alt" id="credits">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Team and supervision</p>
+          <h2>The people behind it.</h2>
+        </header>
+        <div class="faculty-card reveal">
+          <p class="eyebrow">Faculty</p>
+          <strong>Dr. Sujoy Madhab Roy</strong>
+        </div>
+        <ol class="team-grid">
+          <li class="member aura-gold reveal"><span class="member-rank">01</span><span class="member-name">Swapnopam Mitra</span><span class="member-roll">2305825</span></li>
+          <li class="member aura-silver reveal"><span class="member-rank">02</span><span class="member-name">Rajit Chakraborty</span><span class="member-roll">23053067</span></li>
+          <li class="member aura-silver reveal"><span class="member-rank">03</span><span class="member-name">Aritra Chowdhury</span><span class="member-roll">23051578</span></li>
+          <li class="member aura-silver reveal"><span class="member-rank">04</span><span class="member-name">Soham Giri</span><span class="member-roll">23051542</span></li>
+          <li class="member aura-silver reveal"><span class="member-rank">05</span><span class="member-name">Sraman Nandi</span><span class="member-roll">23051874</span></li>
+        </ol>
+        <p class="note reveal">Licence: MIT. See the LICENSE file in the project repository.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>InvariantSmith</p>
+      <nav aria-label="Project links">
+        <a href="https://github.com/TheF0rg0tten0ne/Invariantsmith_seventh_sem_project" rel="noopener">Project repo</a>
+        <a href="https://drive.google.com/drive/folders/1q3km44Y8uxNlnX34n4BrtZXFsSiktCMW?usp=drive_link" rel="noopener">Model download</a>
+        <a href="https://github.com/TheF0rg0tten0ne/Invariantsmith_seventh_sem_project/issues" rel="noopener">Issue tracker</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/motion.js" defer></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/copy.js" defer></script>
+  <script src="js/diff-demo.js" defer></script>
+  <script src="js/tabs.js" defer></script>
+  <script src="js/timeline.js" defer></script>
+  <script src="js/cursor.js" defer></script>
+</body>
+</html>

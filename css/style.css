@@ -486,28 +486,45 @@ body::after {
   50% { transform: rotate(1.4deg); }
 }
 
-/* Brass cursor (replaces the system pointer when a fine pointer is present) */
+/* Tungsten cursor: a small lamp that lights a warm pool around the pointer */
 .has-cursor, .has-cursor * { cursor: none !important; }
-.cursor-ring, .cursor-dot {
-  position: fixed; left: 0; top: 0; pointer-events: none; z-index: 110;
-  border-radius: 50%; opacity: 0; will-change: transform;
+
+.cursor-pool-wrap, .cursor-bulb-wrap {
+  position: fixed; left: 0; top: 0; width: 0; height: 0;
+  pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
+  will-change: transform;
 }
-.cursor-ring {
-  width: 34px; height: 34px; margin: -17px 0 0 -17px;
-  border: 1.5px solid var(--gold);
-  transition: width 0.25s var(--ease), height 0.25s var(--ease), margin 0.25s var(--ease),
-              background-color 0.25s, opacity 0.2s;
+.cursor-pool-wrap.is-on, .cursor-bulb-wrap.is-on { opacity: 1; }
+
+/* The warm pool. Screen-blended so it lifts the dark page without hiding text. */
+.cursor-pool-wrap { z-index: 95; }
+.cursor-pool {
+  position: absolute; left: -200px; top: -200px; width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 206, 132, 0.20) 0, rgba(255, 206, 132, 0.08) 38%, transparent 68%);
+  mix-blend-mode: screen;
+  transition: transform 0.5s var(--ease), opacity 0.4s ease;
 }
-.cursor-dot {
-  width: 6px; height: 6px; margin: -3px 0 0 -3px;
-  background: var(--gold);
+.cursor-pool-wrap.is-hover .cursor-pool { transform: scale(1.22); }
+.cursor-pool-wrap.is-down .cursor-pool { transform: scale(0.82); }
+:root[data-theme="light"] .cursor-pool {
+  background: radial-gradient(circle, rgba(255, 214, 150, 0.55) 0, rgba(255, 214, 150, 0.18) 40%, transparent 68%);
+  mix-blend-mode: multiply;
 }
-.cursor-ring.is-on, .cursor-dot.is-on { opacity: 1; }
-.cursor-ring.is-hover {
-  width: 56px; height: 56px; margin: -28px 0 0 -28px;
-  background: var(--gold-soft);
+
+/* The bulb itself: a warm filament core with a soft falloff. */
+.cursor-bulb-wrap { z-index: 111; }
+.cursor-bulb {
+  position: absolute; left: -11px; top: -11px; width: 22px; height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8e6 0, #ffe2a3 26%, #e9b35e 48%, rgba(233, 179, 94, 0) 72%);
+  transition: transform 0.3s var(--ease), filter 0.3s ease;
 }
-.cursor-ring.is-down { background: var(--gold-soft); }
+.cursor-bulb-wrap.is-hover .cursor-bulb { transform: scale(1.35); }
+.cursor-bulb-wrap.is-down .cursor-bulb { transform: scale(0.6); filter: brightness(0.7); }
+:root[data-theme="light"] .cursor-bulb {
+  background: radial-gradient(circle, #ffffff 0, #f6dca0 26%, #c79a4a 48%, rgba(199, 154, 74, 0) 72%);
+}
 
 /* Timeline: progress line and spotlight */
 .timeline { position: relative; }
